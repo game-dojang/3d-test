@@ -8,7 +8,11 @@ public class IdlePlayerState : PlayerState, IPlayerState
 
     public void Enter()
     {
+        // Idle 애니메이션 실행
+        _animator.SetBool(PlayerController.PlayerAniParamIdle, true);
         
+        // 액션 할당
+        _playerInput.actions["Jump"].performed += Jump;
     }
 
     public void Update()
@@ -21,6 +25,10 @@ public class IdlePlayerState : PlayerState, IPlayerState
 
     public void Exit()
     {
+        // Idle 애니메이션 중단
+        _animator.SetBool(PlayerController.PlayerAniParamIdle, false);
         
+        // 할당된 액션 해제
+        _playerInput.actions["Jump"].performed -= Jump;
     }
 }

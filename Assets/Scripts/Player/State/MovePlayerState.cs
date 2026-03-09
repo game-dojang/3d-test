@@ -15,6 +15,9 @@ public class MovePlayerState : PlayerState, IPlayerState
         
         // _moveSpeed 초기화
         _moveSpeed = 0;
+        
+        // 액션 할당
+        _playerInput.actions["Jump"].performed += Jump;
     }
 
     public void Update()
@@ -39,15 +42,17 @@ public class MovePlayerState : PlayerState, IPlayerState
         }
         else if (!isRun && _moveSpeed > 0)
         {
-            _moveSpeed -= Time.deltaTime;
+            _moveSpeed -= Time.deltaTime * _playerController.BreakForce;
             _moveSpeed = Mathf.Clamp01(_moveSpeed);
         }
-
         _animator.SetFloat(PlayerController.PlayerAniParamMoveSpeed, _moveSpeed);
     }
 
     public void Exit()
     {
+        // 할당된 액션 해제
+        _playerInput.actions["Jump"].performed -= Jump;
+        
         // Move 애니메이션 중단
         _animator.SetBool(PlayerController.PlayerAniParamMove, false);
     }

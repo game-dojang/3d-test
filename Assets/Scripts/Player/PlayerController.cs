@@ -10,18 +10,30 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform headTransform;
     
+    [Header("이동")]
+    [SerializeField] [Range(0, 5)] private float breakForce = 1f;
+    [SerializeField] private float jumpHeight = 2f;
+
+    public float BreakForce => breakForce;
+    
     private Animator _animator;
     private PlayerInput _playerInput;
     private CharacterController _characterController;
     
     // 애니메이션 키
+    public static readonly int PlayerAniParamIdle = Animator.StringToHash("idle");
     public static readonly int PlayerAniParamMove = Animator.StringToHash("move");
+    public static readonly int PlayerAniParamJump = Animator.StringToHash("jump");
     public static readonly int PlayerAniParamMoveSpeed = Animator.StringToHash("move_speed");
+    public static readonly int PlayerAniParamGroundDistance = Animator.StringToHash("ground_distance");
 
     public enum EPlayerState
     {
-        None, Idle, Move
+        None, Idle, Move, Jump
     }
+    
+    // 물리
+    private float _velocityY;
     
     // 현재 상태에 대한 정보
     public EPlayerState PlayerState { get; private set; }
@@ -39,11 +51,13 @@ public class PlayerController : MonoBehaviour
         // 상태 객체 초기화
         var idlePlayerState = new IdlePlayerState(this, _animator, _playerInput);
         var movePlayerState = new MovePlayerState(this, _animator, _playerInput);
+        var jumpPlayerState = new JumpPlayerState(this, _animator, _playerInput);
 
         _playerStates = new Dictionary<EPlayerState, IPlayerState>
         {
             { EPlayerState.Idle, idlePlayerState },
             { EPlayerState.Move, movePlayerState },
+            { EPlayerState.Jump, jumpPlayerState },
         };
         
         // 카메라 할당
@@ -72,5 +86,29 @@ public class PlayerController : MonoBehaviour
         if (PlayerState != EPlayerState.None) _playerStates[PlayerState].Exit();
         PlayerState = state;
         if (PlayerState != EPlayerState.None) _playerStates[PlayerState].Enter();
+    }
+    
+    // 점프
+    public void Jump()
+    {
+        if (!_characterController.isGrounded) return;
+        _velocityY = Mathf.Sqrt(jumpHeight * -2f * Constants.Gravity);
+    }
+
+    private void OnAnimatorMove()
+    {
+        Vector3 movePosition;
+        if (_characterController.isGrounded)
+        {
+            movePosition = _animator.deltaPosition;
+        }
+        else
+        {
+            movePosition = _characterController.velocity * Time.deltaTime;
+        }
+        
+        _velocityY += Constants.Gravity * Time.deltaTime;
+        movePosition.y = _velocityY * Time.deltaTime;
+        _characterController.Move(movePosition);
     }
 }
