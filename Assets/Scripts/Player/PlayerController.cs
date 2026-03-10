@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public EPlayerState PlayerState { get; private set; }
     
     // 상태와 상태 객체를 담고있는 Dictionary
-    private Dictionary<EPlayerState, IPlayerState> _playerStates;
+    private Dictionary<EPlayerState, ICharacterState> _playerStates;
     
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         var jumpPlayerState = new JumpPlayerState(this, _animator, _playerInput);
         var attackPlayerState = new AttackPlayerState(this, _animator, _playerInput);
 
-        _playerStates = new Dictionary<EPlayerState, IPlayerState>
+        _playerStates = new Dictionary<EPlayerState, ICharacterState>
         {
             { EPlayerState.Idle, idlePlayerState },
             { EPlayerState.Move, movePlayerState },
@@ -70,6 +70,9 @@ public class PlayerController : MonoBehaviour
             _playerInput.camera = playerCamera;
             playerCamera.GetComponent<CameraController>().SetTarget(headTransform, _playerInput);
         }
+        
+        // 커서 숨기기
+        _playerInput.actions["Cursor"].performed += _ => GameManager.Instance.SetCursorLock();
     }
 
     private void Start()

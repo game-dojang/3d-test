@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class IdlePlayerState : PlayerState, IPlayerState
+public class IdlePlayerState : PlayerState, ICharacterState
 {
     public IdlePlayerState(PlayerController playerController, Animator animator, PlayerInput playerInput)
      : base(playerController, animator, playerInput) { }

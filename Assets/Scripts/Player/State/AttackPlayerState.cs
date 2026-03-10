@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class AttackPlayerState: PlayerState, IPlayerState
+public class AttackPlayerState: PlayerState, ICharacterState
 {
     public AttackPlayerState(PlayerController playerController, Animator animator, PlayerInput playerInput) 
         : base(playerController, animator, playerInput) { }

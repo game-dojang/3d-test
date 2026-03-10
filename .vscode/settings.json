@@ -67,5 +67,9 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "3d-test.slnx"
+    "dotnet.defaultSolution": "3d-test.slnx",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "c:\\Users\\goyad\\Documents\\GitHub\\3d-test\\3d-test.sln",
+        "c:\\Users\\goyad\\Documents\\GitHub\\3d-test\\Assembly-CSharp-Editor.csproj"
+    ]
 }

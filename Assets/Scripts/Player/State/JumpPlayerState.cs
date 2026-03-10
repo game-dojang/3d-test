@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class JumpPlayerState : PlayerState, IPlayerState
+public class JumpPlayerState : PlayerState, ICharacterState
 {
     public JumpPlayerState(PlayerController playerController, Animator animator, PlayerInput playerInput) 
         : base(playerController, animator, playerInput) { }
