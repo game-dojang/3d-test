@@ -13,6 +13,7 @@ public class IdlePlayerState : PlayerState, IPlayerState
         
         // 액션 할당
         _playerInput.actions["Jump"].performed += Jump;
+        _playerInput.actions["Fire"].performed += Attack;
     }
 
     public void Update()
@@ -30,5 +31,6 @@ public class IdlePlayerState : PlayerState, IPlayerState
         
         // 할당된 액션 해제
         _playerInput.actions["Jump"].performed -= Jump;
+        _playerInput.actions["Fire"].performed -= Attack;
     }
 }

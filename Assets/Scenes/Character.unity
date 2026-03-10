@@ -394,6 +394,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!4 &753680204 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8197781004021983899, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
+  m_PrefabInstance: {fileID: 4429729698300646608}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &768338045
 GameObject:
   m_ObjectHideFlags: 0
@@ -2905,6 +2910,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3806473087054110932, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
+      propertyPath: weaponAttachTransform
+      value: 
+      objectReference: {fileID: 753680204}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -26,10 +26,11 @@ public class PlayerController : MonoBehaviour
     public static readonly int PlayerAniParamJump = Animator.StringToHash("jump");
     public static readonly int PlayerAniParamMoveSpeed = Animator.StringToHash("move_speed");
     public static readonly int PlayerAniParamGroundDistance = Animator.StringToHash("ground_distance");
+    public static readonly int PlayerAniParamAttack = Animator.StringToHash("attack");
 
     public enum EPlayerState
     {
-        None, Idle, Move, Jump
+        None, Idle, Move, Jump, Attack
     }
     
     // 물리
@@ -52,12 +53,14 @@ public class PlayerController : MonoBehaviour
         var idlePlayerState = new IdlePlayerState(this, _animator, _playerInput);
         var movePlayerState = new MovePlayerState(this, _animator, _playerInput);
         var jumpPlayerState = new JumpPlayerState(this, _animator, _playerInput);
+        var attackPlayerState = new AttackPlayerState(this, _animator, _playerInput);
 
         _playerStates = new Dictionary<EPlayerState, IPlayerState>
         {
             { EPlayerState.Idle, idlePlayerState },
             { EPlayerState.Move, movePlayerState },
             { EPlayerState.Jump, jumpPlayerState },
+            { EPlayerState.Attack, attackPlayerState },
         };
         
         // 카메라 할당

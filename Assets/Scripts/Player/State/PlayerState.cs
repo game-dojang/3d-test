@@ -42,4 +42,10 @@ public class PlayerState
         _playerController.Jump();
         _playerController.SetState(PlayerController.EPlayerState.Jump);
     }
+    
+    // 공격
+    protected void Attack(InputAction.CallbackContext context)
+    {
+        _playerController.SetState(PlayerController.EPlayerState.Attack);
+    }
 }
