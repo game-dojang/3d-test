@@ -2424,7 +2424,7 @@ Transform:
   m_GameObject: {fileID: 505038755}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -46, y: 0, z: 43.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3427,6 +3427,11 @@ MonoBehaviour:
   patrolDetectionDistance: 10
   patrolWaitTime: 1
   patrolChance: 30
+  detectionTargetLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  detectionSightAngle: 30
+  minimumRunDistance: 1
 --- !u!195 &512439395
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3437,11 +3442,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_AngularSpeed: 240
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -6413,9 +6418,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ellen
       objectReference: {fileID: 0}
+    - target: {fileID: 1402533419708961397, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3073920744008155376, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10
+      value: 13.68
       objectReference: {fileID: 0}
     - target: {fileID: 3073920744008155376, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
       propertyPath: m_LocalPosition.y
