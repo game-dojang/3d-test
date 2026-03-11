@@ -16,7 +16,13 @@ public class ChaseEnemyState: EnemyState, ICharacterState
         var detectionTargetTransform = _enemyController.DetectionTargetInCircle();
         if (detectionTargetTransform)
         {
-            // TODO: 공격 여부 판단
+            // 공격 여부 판단
+            if (!_navMeshAgent.pathPending &&
+                _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance &&
+                DetectionTargetInSight(detectionTargetTransform.position))
+            {
+                _enemyController.SetState(EnemyController.EEnemyState.Attack);
+            }
             
             // 달리기 여부 판단
             if (DetectionTargetInSight(detectionTargetTransform.position) &&
