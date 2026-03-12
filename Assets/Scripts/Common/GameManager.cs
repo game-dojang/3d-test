@@ -11,6 +11,23 @@ public class GameManager : Singleton<GameManager>
         Cursor.lockState = _isCursorLock ? CursorLockMode.None : CursorLockMode.Locked;
         _isCursorLock = !_isCursorLock;
     }
+
+    private Canvas GetCanvas()
+    {
+        var canvasObject = GameObject.FindGameObjectWithTag("Canvas");
+        Canvas result = null;
+
+        if (!canvasObject)
+        {
+            
+        }
+        else
+        {
+            
+        }
+
+        return null;
+    }
     
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {

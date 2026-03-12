@@ -37,7 +37,7 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
         _hitColliders.Clear();
         for (int i = 0; i < triggerZones.Length; i++)
         {
-            _previousTriggerPositions[i] = GetTriggerWorldPosition(triggerZones[i].position);
+            _previousTriggerPositions[i] = transform.TransformPoint(triggerZones[i].position);
         }
         _isTriggering = true;
     }
@@ -45,10 +45,6 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
     // 무기의 주인이 무기에게 트리거 작동을 중단하라고 전달 함수
     public void EndTrigger()
     {
-        foreach (var hitCollider in _hitColliders)
-        {
-            Notify(hitCollider.gameObject);
-        }
         _isTriggering = false;
     }
 
@@ -58,41 +54,39 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
 
         for (int i = 0; i < triggerZones.Length; i++)
         {
-            var worldPosition = GetTriggerWorldPosition(triggerZones[i].position);
-            var direction = worldPosition - _previousTriggerPositions[i];
+            var worldPosition = transform.TransformPoint(triggerZones[i].position);
+            var direction = transform.TransformDirection(_previousTriggerPositions[i] - triggerZones[i].position);
+            var maxDistance = Vector3.Distance(triggerZones[i].position, _previousTriggerPositions[i]);
+
             Ray ray = new Ray(worldPosition, direction);
-            
             RaycastHit[] hits = new RaycastHit[1];
             
             var hitCount = Physics.SphereCastNonAlloc(ray, triggerZones[i].radius, hits, 
-                direction.magnitude, targetLayerMask);
+                maxDistance, targetLayerMask);
 
-            for (int j = 0; j < hitCount; j++)
+            if (hitCount > 0)
             {
-                var hit = hits[j];
-                _hitColliders.Add(hit.collider);
+                Notify(hits[0].collider.gameObject);
+                _isTriggering = false;
             }
-            _previousTriggerPositions[i] = worldPosition;
+            
+            _previousTriggerPositions[i] = triggerZones[i].position;
         }
-    }
-
-    private Vector3 GetTriggerWorldPosition(Vector3 position)
-    {
-        return transform.position + transform.TransformDirection(position);
     }
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying) return;
+        if (!Application.isPlaying || !_isTriggering) return;
         
         for (int i = 0; i < triggerZones.Length; i++)
         {
-            var worldPosition = GetTriggerWorldPosition(triggerZones[i].position);
-            var direction = worldPosition - _previousTriggerPositions[i];
+            var triggerZonePosition = transform.TransformPoint(triggerZones[i].position);
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(worldPosition, triggerZones[i].radius);
+            Gizmos.DrawWireSphere(triggerZonePosition, triggerZones[i].radius);
+            
+            var previousTriggerZonePosition = transform.TransformPoint(_previousTriggerPositions[i]);
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(worldPosition + direction, triggerZones[i].radius);
+            Gizmos.DrawWireSphere(previousTriggerZonePosition, triggerZones[i].radius);
         }
     }
 

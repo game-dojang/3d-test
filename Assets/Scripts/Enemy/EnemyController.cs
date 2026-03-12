@@ -1,21 +1,31 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
+[Serializable]
+public struct EnemyStatus
+{
+    public int maxHp;
+    public int hp;
+}
+
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
-
 public class EnemyController : MonoBehaviour
 {
     // AI 관련
+    [Header("AI")]
     [SerializeField] private float patrolDetectionDistance = 10f;   // 정찰 범위
     [SerializeField] private float patrolWaitTime = 1f;             // 정찰 대기 시간
     [SerializeField] private float patrolChance = 30f;              // 정촬 확률
     [SerializeField] private LayerMask detectionTargetLayerMask;    // 추격 대상의 Layer Mask
     [SerializeField] private float detectionSightAngle = 30f;
     [SerializeField] private float minimumRunDistance = 1f;
+
+    [Header("Status")] [SerializeField] private EnemyStatus enemyStatus;
     
     public float PatrolDetectionDistance => patrolDetectionDistance;
     public float PatrolWaitTime => patrolWaitTime;
@@ -61,14 +71,18 @@ public class EnemyController : MonoBehaviour
         var idleEnemyState = new IdleEnemyState(this, _animator, _navMeshAgent);
         var patrolEnemyState = new PatrolEnemyState(this, _animator, _navMeshAgent);
         var chaseEnemyState = new ChaseEnemyState(this, _animator, _navMeshAgent);
-        var attackEnemyState = new AttackEnemyState(this, _animator, _navMeshAgent);    // 추가
+        var attackEnemyState = new AttackEnemyState(this, _animator, _navMeshAgent);
+        var hitEnemyState = new HitEnemyState(this, _animator, _navMeshAgent);
+        var deadEnemyState = new DeadEnemyState(this, _animator, _navMeshAgent);
 
         _states = new Dictionary<EEnemyState, ICharacterState>
         {
             { EEnemyState.Idle, idleEnemyState },
             { EEnemyState.Patrol, patrolEnemyState },
             { EEnemyState.Chase, chaseEnemyState },
-            { EEnemyState.Attack, attackEnemyState },                                   // 추가
+            { EEnemyState.Attack, attackEnemyState },
+            { EEnemyState.Hit, hitEnemyState },
+            { EEnemyState.Dead, deadEnemyState },
         };
         SetState(EEnemyState.Idle);
         
@@ -124,6 +138,44 @@ public class EnemyController : MonoBehaviour
             }
         }
         return _targetTransform;
+    }
+
+    public void SetHit(int damage, Vector3 attackDirection)
+    {
+        enemyStatus.hp -= damage;
+        
+        if (enemyStatus.hp <= 0)
+        {
+            // 사망 처리
+            SetState(EEnemyState.Dead);
+        }
+        else
+        {
+            SetState(EEnemyState.Hit);
+            StartCoroutine(Knockback(attackDirection));
+        }
+    }
+
+    private IEnumerator Knockback(Vector3 direction)
+    {
+        Vector3 knockbackDirection = direction;
+        float knockbackDistance = 1f;
+        float knockbackDuration = 0.2f;
+        float elapsed = 0f;
+        
+        Vector3 startPosition = transform.position;
+        Vector3 targetPosition = startPosition + knockbackDirection * knockbackDistance;
+        targetPosition.y = transform.position.y;
+
+        while (elapsed < knockbackDuration)
+        {
+            Vector3 lerpPosition = Vector3.Lerp(startPosition, targetPosition, elapsed / knockbackDuration);
+            lerpPosition.y = startPosition.y;
+            transform.position = lerpPosition;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
     }
     
     // 디버깅용 임시 함수
