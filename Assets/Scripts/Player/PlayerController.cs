@@ -27,10 +27,13 @@ public class PlayerController : MonoBehaviour
     public static readonly int PlayerAniParamMoveSpeed = Animator.StringToHash("move_speed");
     public static readonly int PlayerAniParamGroundDistance = Animator.StringToHash("ground_distance");
     public static readonly int PlayerAniParamAttack = Animator.StringToHash("attack");
+    public static readonly int PlayerAniParamHit = Animator.StringToHash("hit");
+    public static readonly int PlayerAniParamHitX = Animator.StringToHash("hit_x");
+    public static readonly int PlayerAniParamHitZ = Animator.StringToHash("hit_z");
 
     public enum EPlayerState
     {
-        None, Idle, Move, Jump, Attack
+        None, Idle, Move, Jump, Attack, Hit
     }
     
     // 물리
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
         var movePlayerState = new MovePlayerState(this, _animator, _playerInput);
         var jumpPlayerState = new JumpPlayerState(this, _animator, _playerInput);
         var attackPlayerState = new AttackPlayerState(this, _animator, _playerInput);
+        var hitPlayerState = new HitPlayerState(this, _animator, _playerInput);
 
         _playerStates = new Dictionary<EPlayerState, ICharacterState>
         {
@@ -61,6 +65,7 @@ public class PlayerController : MonoBehaviour
             { EPlayerState.Move, movePlayerState },
             { EPlayerState.Jump, jumpPlayerState },
             { EPlayerState.Attack, attackPlayerState },
+            { EPlayerState.Hit, hitPlayerState },
         };
         
         // 카메라 할당
@@ -116,5 +121,12 @@ public class PlayerController : MonoBehaviour
         _velocityY += Constants.Gravity * Time.deltaTime;
         movePosition.y = _velocityY * Time.deltaTime;
         _characterController.Move(movePosition);
+    }
+
+    public void SetHit(int damage, Vector3 attackDirection)
+    {
+        SetState(EPlayerState.Hit);
+        _animator.SetFloat(PlayerAniParamHitX, attackDirection.x);
+        _animator.SetFloat(PlayerAniParamHitZ, attackDirection.z);
     }
 }

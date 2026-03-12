@@ -155,27 +155,6 @@ Transform:
   - {fileID: 1050780333}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &505038755 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6337258453801510328, guid: 865826638775d0c4287d4062c4766ffb, type: 3}
-  m_PrefabInstance: {fileID: 1616607025129100048}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &512439396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 505038755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b35c620e22aeba4bbad0a0ccf131559, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponController
-  triggerZones: []
-  targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &655445496
 GameObject:
   m_ObjectHideFlags: 0
@@ -3044,13 +3023,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chomper
       objectReference: {fileID: 0}
+    - target: {fileID: 6337258453801510328, guid: 865826638775d0c4287d4062c4766ffb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6337258453801510328, guid: 865826638775d0c4287d4062c4766ffb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 512439396}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 865826638775d0c4287d4062c4766ffb, type: 3}
 --- !u!1001 &4429729698300646608
 PrefabInstance:
