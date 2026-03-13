@@ -20,6 +20,8 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
     
     private List<IWeaponObserver<GameObject>> _observers =
         new List<IWeaponObserver<GameObject>>();
+    
+    RaycastHit[] _hits = new RaycastHit[10];
 
     private bool _isTriggering;
 
@@ -40,12 +42,18 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
             _previousTriggerPositions[i] = transform.TransformPoint(triggerZones[i].position);
         }
         _isTriggering = true;
+        // Time.timeScale = 0.1f;
     }
 
     // 무기의 주인이 무기에게 트리거 작동을 중단하라고 전달 함수
     public void EndTrigger()
     {
+        foreach (var hitCollider in _hitColliders)
+        {
+            Notify(hitCollider.gameObject);
+        }
         _isTriggering = false;
+        // Time.timeScale = 1f;
     }
 
     private void FixedUpdate()
@@ -55,28 +63,25 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
         for (int i = 0; i < triggerZones.Length; i++)
         {
             var worldPosition = transform.TransformPoint(triggerZones[i].position);
-            var direction = transform.TransformDirection(_previousTriggerPositions[i] - triggerZones[i].position);
-            var maxDistance = Vector3.Distance(triggerZones[i].position, _previousTriggerPositions[i]);
+            var direction = (worldPosition - _previousTriggerPositions[i]).normalized;
+            var maxDistance = Vector3.Distance(worldPosition, _previousTriggerPositions[i]);
 
-            Ray ray = new Ray(worldPosition, direction);
-            RaycastHit[] hits = new RaycastHit[1];
-            
-            var hitCount = Physics.SphereCastNonAlloc(ray, triggerZones[i].radius, hits, 
+            Ray ray = new Ray(_previousTriggerPositions[i], direction);
+            var hitCount = Physics.SphereCastNonAlloc(ray, triggerZones[i].radius, _hits, 
                 maxDistance, targetLayerMask);
-
-            if (hitCount > 0)
-            {
-                Notify(hits[0].collider.gameObject);
-                _isTriggering = false;
-            }
             
-            _previousTriggerPositions[i] = triggerZones[i].position;
+            for (int j = 0; j < hitCount; j++)
+            {
+                var hitCollider = _hits[j].collider;
+                if (hitCollider) _hitColliders.Add(hitCollider);
+            }
+            _previousTriggerPositions[i] = transform.TransformPoint(triggerZones[i].position);
         }
     }
 
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying || !_isTriggering) return;
+        if (!Application.isPlaying) return;
         
         for (int i = 0; i < triggerZones.Length; i++)
         {
@@ -84,9 +89,8 @@ public class MeleeWeaponController : MonoBehaviour, IWeaponObservable<GameObject
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(triggerZonePosition, triggerZones[i].radius);
             
-            var previousTriggerZonePosition = transform.TransformPoint(_previousTriggerPositions[i]);
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(previousTriggerZonePosition, triggerZones[i].radius);
+            Gizmos.DrawWireSphere(_previousTriggerPositions[i], triggerZones[i].radius);
         }
     }
 

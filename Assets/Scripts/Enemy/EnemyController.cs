@@ -14,6 +14,7 @@ public struct EnemyStatus
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
 public class EnemyController : MonoBehaviour
 {
     // AI 관련
@@ -26,6 +27,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float minimumRunDistance = 1f;
 
     [Header("Status")] [SerializeField] private EnemyStatus enemyStatus;
+
+    [Header("Renderer")] [SerializeField] private Renderer enemyRenderer;
+
+    // Ragdoll
+    [SerializeField] private GameObject ragdollRoot;
+    private Collider[] ragdollColliders;
+    private Rigidbody[] ragdollRigidbodies;
+    private CharacterJoint[] ragdollJoints;
     
     public float PatrolDetectionDistance => patrolDetectionDistance;
     public float PatrolWaitTime => patrolWaitTime;
@@ -35,6 +44,9 @@ public class EnemyController : MonoBehaviour
     
     private Animator _animator;
     private NavMeshAgent _navMeshAgent;
+    
+    // HP 표시
+    private HPBarController _hpBarController;
 
     // 상태
     public enum EEnemyState
@@ -57,11 +69,17 @@ public class EnemyController : MonoBehaviour
     private Transform _targetTransform;
     private Collider[] _detectionResults = new Collider[1];
     
+    // Dead 연출
+    private Rigidbody _rigidbody;
+    private Collider _collider;
+    
     private void Awake()
     {
         // 필수요소 초기화
         _animator = GetComponent<Animator>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
         
         // NavMesh Agent 설정
         _navMeshAgent.updatePosition = false;
@@ -88,6 +106,16 @@ public class EnemyController : MonoBehaviour
         
         // 추격 정보 초기화
         _targetTransform = null;
+
+        _hpBarController = GetComponent<HPBarController>();
+        
+        // Ragdoll 요소 할당
+        ragdollColliders = ragdollRoot.GetComponentsInChildren<Collider>();
+        ragdollRigidbodies = ragdollRoot.GetComponentsInChildren<Rigidbody>();
+        ragdollJoints = ragdollRoot.GetComponentsInChildren<CharacterJoint>();
+        
+        // Ragdoll 비활성화
+        SetRagdollEnable(false);
     }
 
     public void SetState(EEnemyState state)
@@ -143,11 +171,25 @@ public class EnemyController : MonoBehaviour
     public void SetHit(int damage, Vector3 attackDirection)
     {
         enemyStatus.hp -= damage;
+
+        float hpResult = (float)enemyStatus.hp / enemyStatus.maxHp;
+        _hpBarController.SetHp(hpResult);
         
         if (enemyStatus.hp <= 0)
         {
             // 사망 처리
             SetState(EEnemyState.Dead);
+
+            _rigidbody.isKinematic = false;
+            _rigidbody.useGravity = true;
+
+            var direction = attackDirection;
+            direction.y = 1f;
+            direction = direction.normalized;
+            var force = direction * 10f;
+            
+            _rigidbody.AddForce(force, ForceMode.Impulse);
+            _collider.isTrigger = false;
         }
         else
         {
@@ -201,4 +243,51 @@ public class EnemyController : MonoBehaviour
             Gizmos.DrawLine(transform.position, _navMeshAgent.destination);
         }
     }
+
+    private void SetRagdollEnable(bool isEnable)
+    {
+        foreach (var ragdollCollider in ragdollColliders)
+        {
+            ragdollCollider.enabled = isEnable;
+        }
+
+        foreach (var ragdollRigidbody in ragdollRigidbodies)
+        {
+            ragdollRigidbody.isKinematic = !isEnable;
+            ragdollRigidbody.detectCollisions = isEnable;
+        }
+        
+        _animator.enabled = !isEnable;
+        _collider.enabled = !isEnable;
+        _rigidbody.detectCollisions = !isEnable;
+        
+        _animator.Rebind();
+        _animator.Update(0f);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            SetRagdollEnable(true);
+            StartCoroutine(Dissolve());
+        }
+    }
+
+    IEnumerator Dissolve()
+    {
+        var propertyBlock = new MaterialPropertyBlock();
+        enemyRenderer.GetPropertyBlock(propertyBlock);
+        
+        var value = 0f;
+        while (value < 1f)
+        {
+            value += Time.deltaTime;
+            propertyBlock.SetFloat("_Cutoff", value);
+            enemyRenderer.SetPropertyBlock(propertyBlock);
+            yield return null;
+        }
+        Destroy(gameObject);
+    }
+    
 }

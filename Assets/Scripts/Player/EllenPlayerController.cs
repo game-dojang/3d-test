@@ -30,7 +30,7 @@ public class EllenPlayerController : PlayerController, IWeaponObserver<GameObjec
         var enemyController = value.GetComponent<EnemyController>();
         if (enemyController)
         {
-            enemyController.SetHit(10, transform.forward);
+            enemyController.SetHit(10, (enemyController.transform.position - transform.position).normalized);
         }
     }
 

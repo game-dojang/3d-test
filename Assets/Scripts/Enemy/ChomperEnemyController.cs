@@ -28,7 +28,8 @@ public class ChomperEnemyController : EnemyController, IWeaponObserver<GameObjec
     public void OnNext(GameObject value)
     {
         var playerController = value.GetComponent<PlayerController>();
-        if (playerController) playerController.SetHit(10, -transform.forward);
+        var knockbackDirection = (playerController.transform.position - transform.position).normalized;
+        if (playerController) playerController.SetHit(10, knockbackDirection);
     }
 
     public void OnCompleted()

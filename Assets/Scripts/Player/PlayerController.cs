@@ -126,7 +126,9 @@ public class PlayerController : MonoBehaviour
     public void SetHit(int damage, Vector3 attackDirection)
     {
         SetState(EPlayerState.Hit);
-        _animator.SetFloat(PlayerAniParamHitX, attackDirection.x);
-        _animator.SetFloat(PlayerAniParamHitZ, attackDirection.z);
+
+        var localDirection = transform.InverseTransformDirection(attackDirection);
+        _animator.SetFloat(PlayerAniParamHitX, localDirection.x);
+        _animator.SetFloat(PlayerAniParamHitZ, localDirection.z);
     }
 }

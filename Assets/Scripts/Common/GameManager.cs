@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+    public Canvas Canvas => GetCanvas();
+    
     private bool _isCursorLock;
     
     public void SetCursorLock()
@@ -19,14 +22,20 @@ public class GameManager : Singleton<GameManager>
 
         if (!canvasObject)
         {
+            canvasObject = new GameObject("Canvas");
+            canvasObject.AddComponent<Canvas>();
+            canvasObject.AddComponent<CanvasScaler>();
+            canvasObject.AddComponent<GraphicRaycaster>();
             
+            result = canvasObject.GetComponent<Canvas>();
+            result.renderMode = RenderMode.ScreenSpaceOverlay;
+            result.tag = "Canvas";
         }
         else
         {
-            
+            result = canvasObject.GetComponent<Canvas>();
         }
-
-        return null;
+        return result;
     }
     
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
