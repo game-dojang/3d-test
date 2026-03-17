@@ -2629,11 +2629,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 10, y: 2, z: 10}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!4 &753680204 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8197781004021983899, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
-  m_PrefabInstance: {fileID: 4429729698300646608}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &757922318 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3109601397946551949, guid: 865826638775d0c4287d4062c4766ffb, type: 3}
@@ -5600,10 +5595,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -6888,14 +6883,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ellen
       objectReference: {fileID: 0}
-    - target: {fileID: 1402533419708961397, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1402533419708961397, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 3073920744008155376, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.68
@@ -6935,14 +6922,6 @@ PrefabInstance:
     - target: {fileID: 3073920744008155376, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3806473087054110932, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
-      propertyPath: weaponAttachTransform
-      value: 
-      objectReference: {fileID: 753680204}
-    - target: {fileID: 3894280085256790607, guid: 32a3b6b7e3877584581967d092ef8f9a, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -45,13 +45,13 @@ public class GameManager : Singleton<GameManager>
         loadingPanelController.SetProgress(1f);
         asyncOperation.allowSceneActivation = true;
         
-        // 로딩 창 숨기기
-        bool hideDone = false;
-        loadingPanelController.Hide(()=> hideDone = true);
-        yield return new WaitUntil(() => hideDone);
-        
-        // 로딩 패널 오브젝트 제거
-        Destroy(loadingPanelObject);
+        // // 로딩 창 숨기기
+        // bool hideDone = false;
+        // loadingPanelController.Hide(()=> hideDone = true);
+        // yield return new WaitUntil(() => hideDone);
+        //
+        // // 로딩 패널 오브젝트 제거
+        // Destroy(loadingPanelObject);
     }
     
 
