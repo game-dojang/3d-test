@@ -30,6 +30,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
             _instance = this as T;
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
         else
         {
@@ -38,6 +39,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
     }
     
     protected abstract void OnSceneLoaded(Scene scene, LoadSceneMode mode);
+    protected abstract void OnSceneUnloaded(Scene scene);
 
     protected virtual void OnDestroy()
     {
