@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Profiling;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(PlayerInput))]
@@ -95,7 +96,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Profiler.BeginSample("PlayerController::Update");
         if (PlayerState != EPlayerState.None) _playerStates[PlayerState].Update();
+        Profiler.EndSample();
     }
 
     // 새로운 상태를 할당하는 함수

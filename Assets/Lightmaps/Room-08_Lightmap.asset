@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77b87f90bfd10aa4cb6eaeeffb111bf9, type: 3}
+  m_Name: Room-08_Lightmap
+  m_EditorClassIdentifier: Assembly-CSharp::LightmapAssets
+  lightmapColor:
+  - {fileID: 2800000, guid: 2d776d32e2ae0d2489b6202682d5c4d0, type: 3}
+  - {fileID: 2800000, guid: f9d4e0c6eff167c47a4ceb738c80dc7f, type: 3}
+  - {fileID: 2800000, guid: c27d84f334c0c1249954df7ff1db1404, type: 3}
+  - {fileID: 2800000, guid: 7ebcf14757339e547859d94006d97fdf, type: 3}
+  lightmapDir:
+  - {fileID: 2800000, guid: 183ea317ea0d17449b97059f782f58dc, type: 3}
+  - {fileID: 2800000, guid: 93d6f291073340f4f8b5956f229d06df, type: 3}
+  - {fileID: 2800000, guid: 265d74768c7a60546abce3bb229d34c4, type: 3}
+  - {fileID: 2800000, guid: babda16d9907e7c4cac61b7a25224ec4, type: 3}
+  showdowMask:
+  - {fileID: 2800000, guid: ecbeb8c7fa0ae284cb190f622a32bbcc, type: 3}
+  - {fileID: 2800000, guid: 27522574b530c504598dce37f32cb306, type: 3}
+  - {fileID: 2800000, guid: 4ef25c1a51455e34aa38463fe4c20267, type: 3}
+  - {fileID: 2800000, guid: 9c63a497b3d039d448cb3e1e2b496c69, type: 3}

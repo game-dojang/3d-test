@@ -56,6 +56,7 @@ public class GameManager : Singleton<GameManager>
         //
         // // 로딩 패널 오브젝트 제거
         // Destroy(loadingPanelObject);
+        
     }
     
 

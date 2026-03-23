@@ -22,4 +22,13 @@ public class Room
             room.AddNeighbor(this);
         }
     }
+    
+    public void RemoveNeighbor(Room room)
+    {
+        if (Neighbors.Contains(room))
+        {
+            Neighbors.Remove(room);
+            room.Neighbors.Remove(this);
+        }
+    }
 }
